@@ -4,7 +4,6 @@ export const metadata = {
   title: "Pero — AI App Builder",
   description: "Build stunning web apps with AI in seconds",
   manifest: "/manifest.json",
-  themeColor: "#030712",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -12,12 +11,15 @@ export const metadata = {
   },
 };
 
+export const viewport = {
+  themeColor: "#030712",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#030712" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Pero" />

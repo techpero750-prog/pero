@@ -8,6 +8,8 @@ import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
+export const dynamic = "force-dynamic";
+
 // Load Monaco editor dynamically (client-side only)
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
