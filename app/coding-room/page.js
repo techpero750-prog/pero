@@ -6,12 +6,13 @@
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
+// Alias the import to avoid collision with Next.js route segment config
+import dynamicImport from "next/dynamic";
 
 export const dynamic = "force-dynamic";
 
 // Load Monaco editor dynamically (client-side only)
-const MonacoEditor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
+const MonacoEditor = dynamicImport(() => import("@monaco-editor/react"), { ssr: false });
 
 export default function CodingRoom() {
 
