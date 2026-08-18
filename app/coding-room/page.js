@@ -1,10 +1,5 @@
 "use client";
-// app/coding-room/page.tsx (or .jsx)
-export const dynamic = "force-dynamic";
 
-export default function CodingRoomPage() {
-  // Your page implementation
-}
 // ============================================================
 // IMPORTS
 // ============================================================
@@ -17,7 +12,6 @@ import dynamicImport from "next/dynamic";
 const MonacoEditor = dynamicImport(() => import("@monaco-editor/react"), { ssr: false });
 
 export default function CodingRoom() {
-
   // ============================================================
   // STATE
   // ============================================================
@@ -214,12 +208,8 @@ export default function CodingRoom() {
   return (
     <div className="h-screen bg-[#1e1e1e] text-white flex flex-col overflow-hidden">
 
-      {/* ======================================================
-          TOP BAR
-      ====================================================== */}
+      {/* TOP BAR */}
       <header className="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-white/5 flex-shrink-0">
-
-        {/* Left — Logo + project name */}
         <div className="flex items-center gap-3">
           <button onClick={() => router.push("/")}
             className="flex items-center gap-2 hover:opacity-80 transition">
@@ -235,7 +225,6 @@ export default function CodingRoom() {
           </span>
         </div>
 
-        {/* Center — Layout switcher */}
         <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">
           {[
             { id: "editor", label: "📝 Editor" },
@@ -251,7 +240,6 @@ export default function CodingRoom() {
           ))}
         </div>
 
-        {/* Right — Actions */}
         <div className="flex items-center gap-2">
           <select
             value={fontSize}
@@ -283,14 +271,9 @@ export default function CodingRoom() {
         </div>
       </header>
 
-      {/* ======================================================
-          MAIN AREA
-      ====================================================== */}
+      {/* MAIN AREA */}
       <div className="flex-1 flex overflow-hidden">
-
-        {/* ====================================================
-            SIDEBAR — Project list
-        ==================================================== */}
+        {/* SIDEBAR */}
         <aside className="w-52 flex-shrink-0 bg-[#252526] border-r border-white/5 flex flex-col">
           <div className="p-3 border-b border-white/5">
             <p className="text-xs text-gray-600 uppercase tracking-wider">Projects</p>
@@ -331,16 +314,10 @@ export default function CodingRoom() {
           </div>
         </aside>
 
-        {/* ====================================================
-            EDITOR + PREVIEW AREA
-        ==================================================== */}
+        {/* EDITOR + PREVIEW AREA */}
         <div className="flex-1 flex overflow-hidden">
-
-          {/* Code editor */}
           {(layout === "editor" || layout === "split") && (
             <div className={`flex flex-col ${layout === "split" ? "w-1/2" : "flex-1"} border-r border-white/5`}>
-
-              {/* Editor toolbar */}
               <div className="flex items-center justify-between px-3 py-1.5 bg-[#2d2d2d] border-b border-white/5">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500/60" />
@@ -353,7 +330,6 @@ export default function CodingRoom() {
                 <span className="text-xs text-gray-700">{code.length} chars</span>
               </div>
 
-              {/* Monaco Editor */}
               <div className="flex-1 overflow-hidden">
                 {selectedProject ? (
                   <MonacoEditor
@@ -387,11 +363,8 @@ export default function CodingRoom() {
             </div>
           )}
 
-          {/* Live preview */}
           {(layout === "preview" || layout === "split") && (
             <div className={`flex flex-col ${layout === "split" ? "w-1/2" : "flex-1"}`}>
-
-              {/* Preview toolbar */}
               <div className="flex items-center justify-between px-3 py-1.5 bg-[#2d2d2d] border-b border-white/5">
                 <span className="text-xs text-gray-600">Live Preview</span>
                 <div className="flex items-center gap-1 bg-white/5 rounded-md p-0.5">
@@ -406,7 +379,6 @@ export default function CodingRoom() {
                 </div>
               </div>
 
-              {/* Preview iframe */}
               <div className={`flex-1 bg-[#1a1a1a] flex justify-center items-start overflow-auto ${previewMode === "mobile" ? "p-4" : ""}`}>
                 {code ? (
                   <iframe
@@ -426,21 +398,16 @@ export default function CodingRoom() {
               </div>
             </div>
           )}
-
         </div>
 
-        {/* ====================================================
-            AI ASSISTANT PANEL
-        ==================================================== */}
+        {/* AI PANEL */}
         {showAiPanel && (
           <div className="w-72 flex-shrink-0 bg-[#252526] border-l border-white/5 flex flex-col">
-
             <div className="p-3 border-b border-white/5">
               <h3 className="text-xs font-semibold text-gray-300">🤖 AI Assistant</h3>
               <p className="text-xs text-gray-600 mt-0.5">Ask AI to edit your code</p>
             </div>
 
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
               {aiMessages.length === 0 && (
                 <div className="flex flex-col gap-2 mt-2">
@@ -484,7 +451,6 @@ export default function CodingRoom() {
               <div ref={aiEndRef} />
             </div>
 
-            {/* AI input */}
             <div className="p-3 border-t border-white/5 flex flex-col gap-2">
               <textarea
                 value={aiPrompt}
@@ -503,15 +469,11 @@ export default function CodingRoom() {
               </button>
               <p className="text-xs text-gray-700 text-center">Enter to send · Shift+Enter for new line</p>
             </div>
-
           </div>
         )}
-
       </div>
 
-      {/* ======================================================
-          STATUS BAR
-      ====================================================== */}
+      {/* STATUS BAR */}
       <div className="flex items-center justify-between px-4 py-1 bg-[#007acc] text-white text-xs flex-shrink-0">
         <div className="flex items-center gap-4">
           <span>🟢 Ready</span>
@@ -524,7 +486,6 @@ export default function CodingRoom() {
           <span className="capitalize">{profile?.plan} plan</span>
         </div>
       </div>
-
     </div>
   );
 }
