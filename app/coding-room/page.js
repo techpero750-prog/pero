@@ -1,5 +1,10 @@
 "use client";
+// app/coding-room/page.tsx (or .jsx)
+export const dynamic = "force-dynamic";
 
+export default function CodingRoomPage() {
+  // Your page implementation
+}
 // ============================================================
 // IMPORTS
 // ============================================================
