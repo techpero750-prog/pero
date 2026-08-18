@@ -1,8 +1,6 @@
 "use client";
 
-// ============================================================
 // IMPORTS
-// ============================================================
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
@@ -12,9 +10,7 @@ import dynamicImport from "next/dynamic";
 const MonacoEditor = dynamicImport(() => import("@monaco-editor/react"), { ssr: false });
 
 export default function CodingRoom() {
-  // ============================================================
   // STATE
-  // ============================================================
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [projects, setProjects] = useState([]);
@@ -32,20 +28,14 @@ export default function CodingRoom() {
   const [saved, setSaved] = useState(false);
   const aiEndRef = useRef(null);
 
-  // ============================================================
   // ROUTER & SUPABASE
-  // ============================================================
   const router = useRouter();
   const supabase = createClient();
 
-  // ============================================================
   // PLAN ACCESS LEVELS
-  // ============================================================
   const PRO_PLANS = ["pro", "premium", "business", "lifetime"];
 
-  // ============================================================
   // EFFECTS — AUTH + PLAN CHECK
-  // ============================================================
   useEffect(() => {
     async function init() {
       const { data: { user } } = await supabase.auth.getUser();
@@ -85,9 +75,7 @@ export default function CodingRoom() {
     aiEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [aiMessages]);
 
-  // ============================================================
-  // FUNCTION — SELECT PROJECT
-  // ============================================================
+  // HANDLERS
   function handleSelectProject(project) {
     setSelectedProject(project);
     setCode(project.code || "");
@@ -95,9 +83,6 @@ export default function CodingRoom() {
     setSaved(false);
   }
 
-  // ============================================================
-  // FUNCTION — SAVE CODE
-  // ============================================================
   async function handleSave() {
     if (!selectedProject) return;
     setSaving(true);
@@ -111,9 +96,6 @@ export default function CodingRoom() {
     setTimeout(() => setSaved(false), 2000);
   }
 
-  // ============================================================
-  // FUNCTION — DOWNLOAD HTML
-  // ============================================================
   function handleDownload() {
     const blob = new Blob([code], { type: "text/html" });
     const url = URL.createObjectURL(blob);
@@ -124,9 +106,6 @@ export default function CodingRoom() {
     URL.revokeObjectURL(url);
   }
 
-  // ============================================================
-  // FUNCTION — AI FIX / EDIT VIA CHAT
-  // ============================================================
   async function handleAiEdit() {
     if (!aiPrompt.trim() || !code) return;
     setAiLoading(true);
@@ -161,9 +140,6 @@ export default function CodingRoom() {
     setAiLoading(false);
   }
 
-  // ============================================================
-  // FUNCTION — FORMAT CODE (basic)
-  // ============================================================
   function handleFormat() {
     try {
       const formatted = code
@@ -177,9 +153,6 @@ export default function CodingRoom() {
     }
   }
 
-  // ============================================================
-  // LOADING
-  // ============================================================
   if (loading) {
     return (
       <div className="min-h-screen bg-[#1e1e1e] flex items-center justify-center">
@@ -191,9 +164,6 @@ export default function CodingRoom() {
     );
   }
 
-  // ============================================================
-  // PLAN BADGE COLOR
-  // ============================================================
   const planAccents = {
     pro: "from-purple-500 to-indigo-600",
     premium: "from-orange-500 to-amber-500",
@@ -202,17 +172,12 @@ export default function CodingRoom() {
   };
   const accent = planAccents[profile?.plan] || "from-purple-500 to-indigo-600";
 
-  // ============================================================
-  // RENDER
-  // ============================================================
   return (
     <div className="h-screen bg-[#1e1e1e] text-white flex flex-col overflow-hidden">
-
       {/* TOP BAR */}
       <header className="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-white/5 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <button onClick={() => router.push("/")}
-            className="flex items-center gap-2 hover:opacity-80 transition">
+          <button onClick={() => router.push("/")} className="flex items-center gap-2 hover:opacity-80 transition">
             <div className={`w-6 h-6 rounded-md bg-gradient-to-br ${accent} flex items-center justify-center text-xs font-bold`}>P</div>
             <span className="text-sm font-bold text-gray-300">Pero</span>
           </button>
@@ -250,28 +215,24 @@ export default function CodingRoom() {
               <option key={s} value={s}>{s}px</option>
             ))}
           </select>
-          <button onClick={handleFormat}
-            className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs text-gray-400 hover:text-white transition">
+          <button onClick={handleFormat} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs text-gray-400 hover:text-white transition">
             ✨ Format
           </button>
-          <button onClick={handleDownload}
-            className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs text-gray-400 hover:text-white transition">
+          <button onClick={handleDownload} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs text-gray-400 hover:text-white transition">
             📥 Download
           </button>
-          <button onClick={handleSave} disabled={saving}
-            className={`px-3 py-1.5 bg-gradient-to-r ${accent} hover:opacity-90 rounded-lg text-xs font-semibold transition disabled:opacity-50`}>
+          <button onClick={handleSave} disabled={saving} className={`px-3 py-1.5 bg-gradient-to-r ${accent} hover:opacity-90 rounded-lg text-xs font-semibold transition disabled:opacity-50`}>
             {saved ? "✅ Saved!" : saving ? "Saving..." : "💾 Save"}
           </button>
-          <button onClick={() => setShowAiPanel(!showAiPanel)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition border ${
-              showAiPanel ? "bg-purple-500/20 border-purple-500/30 text-purple-400" : "bg-white/5 border-white/10 text-gray-400"
-            }`}>
+          <button onClick={() => setShowAiPanel(!showAiPanel)} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition border ${
+            showAiPanel ? "bg-purple-500/20 border-purple-500/30 text-purple-400" : "bg-white/5 border-white/10 text-gray-400"
+          }`}>
             🤖 AI
           </button>
         </div>
       </header>
 
-      {/* MAIN AREA */}
+      {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex overflow-hidden">
         {/* SIDEBAR */}
         <aside className="w-52 flex-shrink-0 bg-[#252526] border-r border-white/5 flex flex-col">
@@ -282,8 +243,7 @@ export default function CodingRoom() {
             {projects.length === 0 ? (
               <div className="p-4 text-center">
                 <p className="text-xs text-gray-600">No projects yet</p>
-                <button onClick={() => router.push("/")}
-                  className="text-xs text-purple-400 hover:text-purple-300 transition mt-2">
+                <button onClick={() => router.push("/")} className="text-xs text-purple-400 hover:text-purple-300 transition mt-2">
                   Generate one →
                 </button>
               </div>
@@ -307,14 +267,13 @@ export default function CodingRoom() {
             )}
           </div>
           <div className="p-3 border-t border-white/5">
-            <button onClick={() => router.push("/")}
-              className={`w-full py-2 bg-gradient-to-r ${accent} hover:opacity-90 rounded-lg text-xs font-semibold transition`}>
+            <button onClick={() => router.push("/")} className={`w-full py-2 bg-gradient-to-r ${accent} hover:opacity-90 rounded-lg text-xs font-semibold transition`}>
               + New app
             </button>
           </div>
         </aside>
 
-        {/* EDITOR + PREVIEW AREA */}
+        {/* EDITOR AND PREVIEW */}
         <div className="flex-1 flex overflow-hidden">
           {(layout === "editor" || layout === "split") && (
             <div className={`flex flex-col ${layout === "split" ? "w-1/2" : "flex-1"} border-r border-white/5`}>
@@ -324,9 +283,7 @@ export default function CodingRoom() {
                   <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
                   <div className="w-3 h-3 rounded-full bg-green-500/60" />
                 </div>
-                <span className="text-xs text-gray-600">
-                  {selectedProject?.title || "untitled"}.html
-                </span>
+                <span className="text-xs text-gray-600">{selectedProject?.title || "untitled"}.html</span>
                 <span className="text-xs text-gray-700">{code.length} chars</span>
               </div>
 
@@ -342,16 +299,9 @@ export default function CodingRoom() {
                       fontSize,
                       minimap: { enabled: layout === "editor" },
                       wordWrap: "on",
-                      formatOnPaste: true,
-                      formatOnType: true,
                       automaticLayout: true,
                       scrollBeyondLastLine: false,
                       tabSize: 2,
-                      lineNumbers: "on",
-                      renderLineHighlight: "all",
-                      cursorBlinking: "smooth",
-                      smoothScrolling: true,
-                      padding: { top: 12 },
                     }}
                   />
                 ) : (
@@ -368,14 +318,8 @@ export default function CodingRoom() {
               <div className="flex items-center justify-between px-3 py-1.5 bg-[#2d2d2d] border-b border-white/5">
                 <span className="text-xs text-gray-600">Live Preview</span>
                 <div className="flex items-center gap-1 bg-white/5 rounded-md p-0.5">
-                  <button onClick={() => setPreviewMode("desktop")}
-                    className={`px-2 py-0.5 rounded text-xs transition ${previewMode === "desktop" ? "bg-white/10 text-white" : "text-gray-500 hover:text-white"}`}>
-                    🖥
-                  </button>
-                  <button onClick={() => setPreviewMode("mobile")}
-                    className={`px-2 py-0.5 rounded text-xs transition ${previewMode === "mobile" ? "bg-white/10 text-white" : "text-gray-500 hover:text-white"}`}>
-                    📱
-                  </button>
+                  <button onClick={() => setPreviewMode("desktop")} className={`px-2 py-0.5 rounded text-xs transition ${previewMode === "desktop" ? "bg-white/10 text-white" : "text-gray-500 hover:text-white"}`}>🖥</button>
+                  <button onClick={() => setPreviewMode("mobile")} className={`px-2 py-0.5 rounded text-xs transition ${previewMode === "mobile" ? "bg-white/10 text-white" : "text-gray-500 hover:text-white"}`}>📱</button>
                 </div>
               </div>
 
@@ -384,9 +328,7 @@ export default function CodingRoom() {
                   <iframe
                     srcDoc={code}
                     className={`bg-white transition-all duration-300 ${
-                      previewMode === "mobile"
-                        ? "w-[390px] h-[700px] rounded-xl border border-white/10"
-                        : "w-full h-full"
+                      previewMode === "mobile" ? "w-[390px] h-[700px] rounded-xl border border-white/10" : "w-full h-full"
                     }`}
                     sandbox="allow-scripts"
                   />
@@ -405,86 +347,38 @@ export default function CodingRoom() {
           <div className="w-72 flex-shrink-0 bg-[#252526] border-l border-white/5 flex flex-col">
             <div className="p-3 border-b border-white/5">
               <h3 className="text-xs font-semibold text-gray-300">🤖 AI Assistant</h3>
-              <p className="text-xs text-gray-600 mt-0.5">Ask AI to edit your code</p>
             </div>
-
             <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
-              {aiMessages.length === 0 && (
-                <div className="flex flex-col gap-2 mt-2">
-                  <p className="text-xs text-gray-600 text-center">Try asking:</p>
-                  {[
-                    "Make the button larger",
-                    "Change the color to blue",
-                    "Add a footer section",
-                    "Fix any errors",
-                    "Make it mobile responsive",
-                  ].map(suggestion => (
-                    <button
-                      key={suggestion}
-                      onClick={() => setAiPrompt(suggestion)}
-                      className="text-left text-xs px-3 py-2 bg-white/3 hover:bg-white/8 border border-white/5 hover:border-purple-500/30 rounded-lg text-gray-500 hover:text-gray-300 transition"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-              )}
               {aiMessages.map((m, i) => (
                 <div key={i} className={`text-xs px-3 py-2 rounded-xl max-w-[95%] ${
-                  m.role === "user"
-                    ? "bg-purple-600/30 border border-purple-500/20 self-end text-purple-200"
-                    : "bg-white/5 border border-white/10 self-start text-gray-400"
+                  m.role === "user" ? "bg-purple-600/30 border border-purple-500/20 self-end text-purple-200" : "bg-white/5 border border-white/10 self-start text-gray-400"
                 }`}>
                   {m.content}
                 </div>
               ))}
-              {aiLoading && (
-                <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 self-start flex items-center gap-2">
-                  <div className="flex gap-1">
-                    <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce delay-100" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce delay-200" />
-                  </div>
-                  <span className="text-xs text-gray-500">Thinking...</span>
-                </div>
-              )}
               <div ref={aiEndRef} />
             </div>
-
             <div className="p-3 border-t border-white/5 flex flex-col gap-2">
               <textarea
                 value={aiPrompt}
                 onChange={(e) => setAiPrompt(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleAiEdit())}
-                placeholder="Ask AI to edit your code..."
+                placeholder="Ask AI to edit..."
                 rows={3}
-                className="w-full p-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder-gray-700 focus:outline-none focus:border-purple-500/50 resize-none"
+                className="w-full p-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder-gray-700 focus:outline-none resize-none"
               />
-              <button
-                onClick={handleAiEdit}
-                disabled={aiLoading || !aiPrompt.trim()}
-                className={`w-full py-2 bg-gradient-to-r ${accent} hover:opacity-90 disabled:opacity-50 rounded-lg text-xs font-semibold transition`}
-              >
+              <button onClick={handleAiEdit} disabled={aiLoading || !aiPrompt.trim()} className={`w-full py-2 bg-gradient-to-r ${accent} hover:opacity-90 disabled:opacity-50 rounded-lg text-xs font-semibold transition`}>
                 {aiLoading ? "Editing..." : "✨ Apply AI Edit"}
               </button>
-              <p className="text-xs text-gray-700 text-center">Enter to send · Shift+Enter for new line</p>
             </div>
           </div>
         )}
       </div>
 
-      {/* STATUS BAR */}
+      {/* FOOTER */}
       <div className="flex items-center justify-between px-4 py-1 bg-[#007acc] text-white text-xs flex-shrink-0">
-        <div className="flex items-center gap-4">
-          <span>🟢 Ready</span>
-          <span>HTML</span>
-          <span>UTF-8</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <span>{code.split("\n").length} lines</span>
-          <span>Font size: {fontSize}px</span>
-          <span className="capitalize">{profile?.plan} plan</span>
-        </div>
+        <span>🟢 Ready</span>
+        <span>{code.split("\n").length} lines</span>
       </div>
     </div>
   );
