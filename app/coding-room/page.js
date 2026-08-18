@@ -6,8 +6,7 @@
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-// Alias the import to avoid collision with Next.js route segment config
-import dynamicImport from "next/dynamic";
+import dynamicImport from "next/dynamic"; // Renamed from dynamic
 
 export const dynamic = "force-dynamic";
 
